@@ -14,8 +14,9 @@
 
 `response`对象封装了`HTTP`响应，我们操作`response`对象的方法，就可以把`HTTP`响应返回给浏览器。
 
-用`Node.js`实现一个`HTTP`服务器程序非常简单。我们来实现一个最简单的`Web`程序`hello.js`，它对于所有请求，都返回`Hello world!`：
+用`Node.js`实现一个`HTTP`服务器程序非常简单。我们来实现一个最简单的`Web`程序`home.js`，它对于所有请求，都返回`Hello world!`：
 ```
+//对应的代码文件:home.js
 'use strict';
 
 // 导入http模块:
@@ -32,12 +33,12 @@ var server = http.createServer(function (request, response) {
     response.end('<h1>Hello world!</h1>');
 });
 
-// 让服务器监听8080端口:
-server.listen(8080);
+// 让服务器监听8082端口:
+server.listen(8082);
 
-console.log('Server is running at http://127.0.0.1:8080/');
+console.log('Server is running at http://127.0.0.1:8082/');
 ```
-在命令提示符下运行该程序，可以看到以下输出：
+在命令提示符下运行该程序(`node home.js`)，可以看到以下输出：
 ```
 Administrator@XB-201606171743 MINGW64 /d/nodejs/http
 $ ls
@@ -48,7 +49,7 @@ $ node home.js
 server is running at http://127.0.0.1:8082
 
 ```
-不要关闭命令提示符，直接打开浏览器输入http://localhost:8082，即可看到服务器响应的内容：
+不要关闭命令提示符，直接打开浏览器输入`http://localhost:8082`，即可看到服务器响应的内容：
 ```
 Hello, it is me.
 ```
@@ -61,30 +62,46 @@ GET/favicon.ico
 ![浏览器运行结果](p1.png)
 ## 文件服务器
 
-让我们继续扩展一下上面的`Web`程序。我们可以设定一个目录，然后让Web程序变成一个文件服务器。要实现这一点，我们只需要解析request.url中的路径，然后在本地找到对应的文件，把文件内容发送出去就可以了。
+让我们继续扩展一下上面的`Web`程序。我们可以设定一个目录，然后让`Web`程序变成一个文件服务器。要实现这一点，我们只需要解析`request.url`中的路径，然后在本地找到对应的文件，把文件内容发送出去就可以了。
 
-解析URL需要用到Node.js提供的url模块，它使用起来非常简单，通过parse()将一个字符串解析为一个Url对象：
-
+解析`URL`需要用到`Node.js`提供的`url模块`，它使用起来非常简单，通过`parse()`将一个字符串解析为一个`Url`对象：
+```nodejs
+//对应的代码文件:urlParse.js
 'use strict';
 
+//1. 加载url模块
 var url = require('url');
 
-console.log(url.parse('http://user:pass@host.com:8080/path/to/file?query=string#hash'));
-结果如下：
+//2. 构造一个待解析的url地址
+var uri = "http://localhost.com:8082/path/to/file?query=string#hash";
 
+//3. 解析
+var data = url.parse(uri);
+console.log(data);
+
+//4. 运行:node urlParse.js
+```
+结果如下：
+```console
+$ ls
+home.js  node_modules/  p1.png  README.md  urlParse.js
+
+Administrator@XB-201606171743 MINGW64 /d/nodejs/nodejs-learning/http (master)
+$ node urlParse.js
 Url {
   protocol: 'http:',
   slashes: true,
-  auth: 'user:pass',
-  host: 'host.com:8080',
-  port: '8080',
-  hostname: 'host.com',
+  auth: null,
+  host: 'localhost.com:8082',
+  port: '8082',
+  hostname: 'localhost.com',
   hash: '#hash',
   search: '?query=string',
   query: 'query=string',
   pathname: '/path/to/file',
   path: '/path/to/file?query=string',
-  href: 'http://user:pass@host.com:8080/path/to/file?query=string#hash' }
+  href: 'http://localhost.com:8082/path/to/file?query=string#hash' }
+```
 处理本地文件目录需要使用Node.js提供的path模块，它可以方便地构造目录：
 
 'use strict';

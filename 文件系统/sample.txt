@@ -1,0 +1,1 @@
+你好，这是一个sample.txt文件，编码方式是"utf-8",文件名是"sample.txt";

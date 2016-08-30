@@ -201,7 +201,7 @@ Server is running at http://127.0.0.1:8080/
 
 在浏览器输入`http://localhost:8080/`时，会返回`404`，原因是程序识别出`HTTP`请求的不是文件，而是目录。请修改`file_server.js`，如果遇到请求的路径是目录，则自动在目录下依次搜索`index.html、default.html`，如果找到了，就返回`HTML`文件的内容。
 参考代码如下：
-```
+```JavaScript
 'use strict';
 //导入fs,url,path,http模块
 var
